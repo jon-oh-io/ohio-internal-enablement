@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Claude Working Directory — Setup Guide | OH.io</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Tokens ─────────────────────────────────────────────────── */
+    :root {
+      --black:      #0D0D0D;
+      --black-2:    #141414;
+      --black-3:    #1C1C1C;
+      --black-4:    #252525;
+      --off-white:  #EDEBE4;
+      --cream:      #D8D4CC;
+      --red:        #E8002D;
+      --red-dim:    #B8001F;
+      --gray:       #888888;
+      --gray-light: #AAAAAA;
+      --gray-dim:   #3A3A3A;
+      --border:     #2A2A2A;
+    }
+
+    /* ── Reset ──────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--black);
+      color: var(--off-white);
+      line-height: 1.7;
+      font-size: 16px;
+    }
+
+    /* ── Layout ─────────────────────────────────────────────────── */
+    .container { max-width: 860px; margin: 0 auto; padding: 0 2rem; }
+
+    /* ── Header ─────────────────────────────────────────────────── */
+    header {
+      background: var(--black);
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(8px);
+    }
+    header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .logo-link { display: inline-flex; align-items: center; text-decoration: none; }
+    .logo-svg { height: 36px; width: auto; display: block; }
+    .site-nav {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+    }
+    .site-nav a {
+      position: relative;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray);
+      text-decoration: none;
+      padding: 0.25rem 0;
+      transition: color 0.15s;
+    }
+    .site-nav a:hover { color: var(--off-white); }
+    .site-nav a.active { color: var(--off-white); }
+    .site-nav a.active::after {
+      content: '';
+      position: absolute;
+      left: 0; right: 0; bottom: -3px;
+      height: 2px;
+      background: var(--red);
+    }
+
+    /* ── Hero ───────────────────────────────────────────────────── */
+    .hero {
+      padding: 5rem 0 4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1.25rem;
+    }
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+    }
+    .hero h1 {
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      color: var(--off-white);
+      letter-spacing: -0.03em;
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 span { color: var(--red); }
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--gray-light);
+      font-weight: 400;
+      max-width: 560px;
+      margin-bottom: 2.5rem;
+    }
+    .hero-meta {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .meta-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.82rem;
+      color: var(--gray);
+      font-weight: 500;
+    }
+    .meta-item svg { opacity: 0.6; }
+
+    /* ── Overview cards ─────────────────────────────────────────── */
+    .overview {
+      padding: 3.5rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .section-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1.5rem;
+    }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .card {
+      background: var(--black-2);
+      padding: 1.5rem;
+    }
+    .card-icon {
+      width: 36px;
+      height: 36px;
+      background: var(--black-4);
+      border: 1px solid var(--gray-dim);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+    .card h3 {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--off-white);
+      margin-bottom: 0.35rem;
+      letter-spacing: -0.01em;
+    }
+    .card p {
+      font-size: 0.8rem;
+      color: var(--gray);
+      line-height: 1.5;
+    }
+
+    /* ── Steps ──────────────────────────────────────────────────── */
+    .steps-section { padding: 4rem 0; }
+    .steps-section > .container > h2 {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 3rem;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 0 2rem;
+      margin-bottom: 4rem;
+      position: relative;
+    }
+    .step:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 27px;
+      top: 56px;
+      bottom: -3rem;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .step-number {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: var(--black-3);
+      border: 1px solid var(--gray-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--red);
+      flex-shrink: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .step-body { padding-top: 0.9rem; }
+    .step-body h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--off-white);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+    .step-body p {
+      font-size: 0.93rem;
+      color: var(--gray-light);
+      margin-bottom: 1rem;
+      line-height: 1.75;
+    }
+    .step-body ul, .step-body ol {
+      padding-left: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .step-body li {
+      font-size: 0.9rem;
+      color: var(--gray-light);
+      margin-bottom: 0.4rem;
+      line-height: 1.6;
+    }
+    .step-body li strong { color: var(--off-white); font-weight: 600; }
+
+    /* ── File tree ──────────────────────────────────────────────── */
+    .file-tree {
+      background: var(--black-3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      line-height: 1.9;
+      margin: 1rem 0;
+      color: var(--gray-light);
+      white-space: pre;
+      overflow-x: auto;
+    }
+    .file-tree .folder { color: var(--off-white); font-weight: 500; }
+    .file-tree .file-special { color: var(--red); }
+    .file-tree .comment { color: var(--gray-dim); font-style: italic; margin-left: 0.5rem; }
+
+    /* ── Code / Prompt blocks ───────────────────────────────────── */
+    .code-block {
+      background: var(--black-3);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin: 1rem 0;
+      overflow: hidden;
+    }
+    .code-block-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 1rem;
+      background: var(--black-4);
+      border-bottom: 1px solid var(--border);
+    }
+    .code-block-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+    }
+    .copy-btn {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--gray);
+      background: none;
+      border: 1px solid var(--gray-dim);
+      border-radius: 4px;
+      padding: 0.2rem 0.6rem;
+      cursor: pointer;
+      transition: color 0.15s, border-color 0.15s;
+      font-family: inherit;
+    }
+    .copy-btn:hover { color: var(--off-white); border-color: var(--gray); }
+    .copy-btn.copied { color: var(--red); border-color: var(--red-dim); }
+    .code-block pre {
+      padding: 1.25rem 1.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      line-height: 1.75;
+      color: var(--off-white);
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin: 0;
+    }
+
+    /* ── Callout ────────────────────────────────────────────────── */
+    .callout {
+      display: flex;
+      gap: 0.75rem;
+      background: var(--black-3);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--red);
+      border-radius: 0 6px 6px 0;
+      padding: 0.9rem 1.1rem;
+      margin: 1rem 0;
+    }
+    .callout-icon { font-size: 1rem; flex-shrink: 0; margin-top: 0.05rem; }
+    .callout p {
+      font-size: 0.87rem !important;
+      color: var(--cream) !important;
+      margin: 0 !important;
+    }
+    .callout strong { color: var(--off-white) !important; }
+
+    /* ── Table ──────────────────────────────────────────────────── */
+    .guide-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.87rem;
+    }
+    .guide-table th {
+      text-align: left;
+      padding: 0.65rem 1rem;
+      background: var(--black-4);
+      color: var(--gray-light);
+      font-weight: 600;
+      font-size: 0.75rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+    }
+    .guide-table th:first-child { border-radius: 6px 0 0 0; }
+    .guide-table th:last-child  { border-radius: 0 6px 0 0; }
+    .guide-table td {
+      padding: 0.65rem 1rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--gray-light);
+      vertical-align: top;
+    }
+    .guide-table td:first-child {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      color: var(--off-white);
+      white-space: nowrap;
+    }
+    .guide-table tr:last-child td { border-bottom: none; }
+    .guide-table tr:hover td { background: var(--black-2); }
+
+    /* ── Maintenance section ─────────────────────────────────────── */
+    .maintenance {
+      padding: 3.5rem 0;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Quick reference ────────────────────────────────────────── */
+    .quick-ref {
+      background: var(--black-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 2rem;
+      margin: 3.5rem 0;
+    }
+    .quick-ref h2 {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 1.5rem;
+    }
+    .qr-item { margin-bottom: 2rem; }
+    .qr-item:last-child { margin-bottom: 0; }
+    .qr-item h3 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--off-white);
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── Footer ─────────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 2.5rem 0;
+    }
+    footer .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .footer-left { display: flex; align-items: center; gap: 1rem; }
+    footer p { font-size: 0.78rem; color: var(--gray); }
+
+    /* ── Progress nav ───────────────────────────────────────────── */
+    .progress-nav {
+      position: fixed;
+      right: 2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      z-index: 99;
+    }
+    .progress-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gray-dim);
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      text-decoration: none;
+    }
+    .progress-dot:hover,
+    .progress-dot.active { background: var(--red); transform: scale(1.4); }
+
+    @media (max-width: 720px) {
+      .site-nav { gap: 1.1rem; }
+      .site-nav a { font-size: 0.72rem; letter-spacing: 0.05em; }
+      .progress-nav { display: none; }
+      .step { grid-template-columns: 44px 1fr; gap: 0 1.25rem; }
+      .step-number { width: 44px; height: 44px; font-size: 0.9rem; }
+      .hero h1 { font-size: 2rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Header ─────────────────────────────────────────────────── -->
+  <header>
+    <div class="container">
+      <!-- OH.io logo recreated as SVG — links home -->
+      <a class="logo-link" href="index.html" aria-label="OH.io — Home">
+        <svg class="logo-svg" viewBox="0 0 220 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="OH.io">
+          <!-- O -->
+          <text x="2" y="52" font-family="'Inter', Helvetica, Arial, sans-serif" font-weight="900" font-size="58" fill="#EDEBE4">O</text>
+          <!-- H -->
+          <text x="48" y="52" font-family="'Inter', Helvetica, Arial, sans-serif" font-weight="900" font-size="58" fill="#EDEBE4">H</text>
+          <!-- dot -->
+          <circle cx="107" cy="47" r="7" fill="#E8002D"/>
+          <!-- i -->
+          <text x="118" y="52" font-family="'Inter', Helvetica, Arial, sans-serif" font-weight="900" font-size="58" fill="#888888">i</text>
+          <!-- o -->
+          <text x="141" y="52" font-family="'Inter', Helvetica, Arial, sans-serif" font-weight="900" font-size="58" fill="#888888">o</text>
+        </svg>
+      </a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html">Home</a>
+        <a href="claude-setup-guide.html" class="active">Setup Guide</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ── Progress nav dots ──────────────────────────────────────── -->
+  <nav class="progress-nav" aria-label="Step navigation">
+    <a class="progress-dot" href="#step-1" title="Step 1"></a>
+    <a class="progress-dot" href="#step-2" title="Step 2"></a>
+    <a class="progress-dot" href="#step-3" title="Step 3"></a>
+    <a class="progress-dot" href="#step-4" title="Step 4"></a>
+    <a class="progress-dot" href="#step-5" title="Step 5"></a>
+    <a class="progress-dot" href="#step-6" title="Step 6"></a>
+  </nav>
+
+  <!-- ── Hero ──────────────────────────────────────────────────── -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-eyebrow">Internal Enablement</div>
+      <h1>Claude Working<br /><span>Directory Setup</span></h1>
+      <p class="hero-sub">A persistent memory system that lets Claude know who you are, how you work, and what you're working on — so you never re-explain yourself.</p>
+      <div class="hero-meta">
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="#888" stroke-width="1.5"/><path d="M8 4.5V8.5L10.5 11" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg>
+          20–30 minutes
+        </div>
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="#888" stroke-width="1.5"/><path d="M5 7h6M5 10h4" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg>
+          6 steps
+        </div>
+        <div class="meta-item">
+          <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 4.5h10M3 8h10M3 11.5h6" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg>
+          No coding required
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Overview cards ────────────────────────────────────────── -->
+  <section class="overview">
+    <div class="container">
+      <p class="section-label">What you're building</p>
+      <div class="cards">
+        <div class="card">
+          <div class="card-icon">📄</div>
+          <h3>CLAUDE.md</h3>
+          <p>A one-line entry point at the root of your working folder that tells Claude where to find your instructions.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">📁</div>
+          <h3>claude-context/</h3>
+          <p>A folder of Markdown files Claude reads as standing instructions every session.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">💼</div>
+          <h3>portcos/</h3>
+          <p>Per-client or per-project subfolders for source material and generated outputs.</p>
+        </div>
+        <div class="card">
+          <div class="card-icon">🗂</div>
+          <h3>internal-enablement/</h3>
+          <p>Team-facing deliverables — guides, templates, and playbooks not tied to a specific client.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Steps ──────────────────────────────────────────────────── -->
+  <section class="steps-section">
+    <div class="container">
+      <h2>Step-by-step guide</h2>
+
+      <!-- Step 1 -->
+      <div class="step" id="step-1">
+        <div class="step-number">1</div>
+        <div class="step-body">
+          <h3>Create Your Working Folder</h3>
+          <p>Open Cowork and select (or create) a dedicated folder on your computer. Good names: <strong>Claude CoWork</strong> or <strong>[Your Name] Claude</strong>. This becomes your persistent workspace.</p>
+          <p>Create the following folder structure inside it. Leave the files empty for now — you'll populate them in later steps.</p>
+          <div class="file-tree">
+<span class="folder">Claude CoWork/</span>
+├── <span class="file-special">CLAUDE.md</span>          <span class="comment">← entry point</span>
+├── <span class="folder">claude-context/</span>
+│   ├── INDEX.md
+│   └── operating-guide.md
+├── <span class="folder">portcos/</span>          <span class="comment">← or clients/, projects/</span>
+└── <span class="folder">internal-enablement/</span>
+          </div>
+          <div class="callout">
+            <span class="callout-icon">✓</span>
+            <p>Create the folders now. The files will be generated for you in Step 3.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step" id="step-2">
+        <div class="step-number">2</div>
+        <div class="step-body">
+          <h3>Create CLAUDE.md</h3>
+          <p>This single file at the root of your working folder is the only instruction Claude reads automatically. Its entire job is to point Claude at your context folder.</p>
+          <p>Create <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">CLAUDE.md</code> with this content — updating the path to match your own folder location:</p>
+          <div class="code-block">
+            <div class="code-block-header">
+              <span class="code-block-label">CLAUDE.md</span>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <pre>At the start of any non-trivial task, read /path/to/your/Claude CoWork/claude-context/INDEX.md and follow its guidance</pre>
+          </div>
+          <p><strong style="color:var(--off-white);">How to find your path:</strong></p>
+          <ul>
+            <li><strong>Mac:</strong> Right-click the <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;">claude-context</code> folder → Get Info → copy the path under "Where"</li>
+            <li><strong>Windows:</strong> Shift + right-click the folder → Copy as path</li>
+          </ul>
+          <div class="code-block" style="margin-top:0.75rem;">
+            <div class="code-block-header">
+              <span class="code-block-label">Example (Mac, user named Alex)</span>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <pre>At the start of any non-trivial task, read /Users/alex/Documents/Claude CoWork/claude-context/INDEX.md and follow its guidance</pre>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3 -->
+      <div class="step" id="step-3">
+        <div class="step-number">3</div>
+        <div class="step-body">
+          <h3>Run the Setup Interview</h3>
+          <p>This is the most important step. Open a new Cowork session with your folder connected, then paste the prompt below. Claude will interview you one question at a time, then draft two files for your review:</p>
+          <ul>
+            <li><strong>operating-guide.md</strong> — how you want Claude to communicate, work, and produce output.</li>
+            <li><strong>INDEX.md</strong> — a map of your context folder with instructions for how Claude uses it.</li>
+          </ul>
+          <div class="code-block">
+            <div class="code-block-header">
+              <span class="code-block-label">Paste this prompt into Cowork</span>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <pre>I'm setting up a Claude working directory. I want you to interview me to build two files:
+
+1. operating-guide.md — how I want you to communicate, work, and produce output.
+2. INDEX.md — a map of my claude-context folder with instructions for how you should use it.
+
+Interview me with one question at a time. Cover these areas:
+- My role and what I actually do day-to-day
+- Who I work with and for (internal team, clients, stakeholders)
+- The top 3–5 tasks I'll ask you to help with most often
+- How I want you to communicate (tone, length, format, level of detail)
+- How I want you to handle ambiguity — ask me or make a call?
+- How I want you to handle disagreement — push back once, always defer, or something else?
+- Any hard rules: things you should never do, never assume, never fabricate
+- Any recurring workflows I have that you should recognize and structure automatically
+- Confidentiality or data hygiene rules (e.g., test data to ignore, client names to keep separate)
+- File output preferences (when to create files vs. respond in chat, preferred formats)
+
+After the interview, draft both files and show them to me for review before saving anything. Once I approve, save them to my claude-context/ folder.</pre>
+          </div>
+          <div class="callout">
+            <span class="callout-icon">⚠</span>
+            <p><strong>Tip:</strong> If Claude asks about something you haven't figured out yet, say so. An honest partial guide is far more useful than a fabricated complete one. The guide sharpens over time.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4 -->
+      <div class="step" id="step-4">
+        <div class="step-number">4</div>
+        <div class="step-body">
+          <h3>Review and Save the Files</h3>
+          <p>After the interview, Claude will show you drafts of <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">operating-guide.md</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">INDEX.md</code>. Check them carefully before confirming:</p>
+          <ul>
+            <li>Does the communication style match how you actually want to work?</li>
+            <li>Are the hard rules correct and complete?</li>
+            <li>Did Claude make any assumptions that are wrong?</li>
+          </ul>
+          <p>Request any changes in the conversation, then confirm. Claude will save both files to <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">claude-context/</code>.</p>
+          <div class="callout">
+            <span class="callout-icon">📌</span>
+            <p>The <strong>INDEX.md</strong> file is your map. Every time you add a new file to <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;">claude-context/</code>, ask Claude to update the Contents table so the index stays accurate.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 5 -->
+      <div class="step" id="step-5">
+        <div class="step-number">5</div>
+        <div class="step-body">
+          <h3>Test the Setup</h3>
+          <p>Start a fresh Cowork session and give Claude a real task — something typical for your role. Verify that it:</p>
+          <ul>
+            <li>Reads your operating guide before starting work</li>
+            <li>Matches your preferred tone and format without being told</li>
+            <li>Applies your hard rules automatically</li>
+          </ul>
+          <p>If something feels off, go back to <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">operating-guide.md</code> and edit it directly, or ask Claude to update it based on what you observed.</p>
+        </div>
+      </div>
+
+      <!-- Step 6 -->
+      <div class="step" id="step-6">
+        <div class="step-number">6</div>
+        <div class="step-body">
+          <h3>Add Client or Project Context Files</h3>
+          <p>Once your operating guide is in place, add a context file for each active client, project, or account. These are conditional — Claude only reads them when that subject is active.</p>
+
+          <table class="guide-table">
+            <thead>
+              <tr>
+                <th>File name</th>
+                <th>When to create it</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>portco-&lt;name&gt;.md</td>
+                <td>Per client — voice, buyers, terminology, do-not-use lists</td>
+              </tr>
+              <tr>
+                <td>template-&lt;artifact&gt;.md</td>
+                <td>Reusable output templates (ROI models, discovery decks, one-pagers)</td>
+              </tr>
+              <tr>
+                <td>playbook-&lt;topic&gt;.md</td>
+                <td>Repeatable workflows you run regularly (pre-call prep, post-call summaries)</td>
+              </tr>
+              <tr>
+                <td>glossary.md</td>
+                <td>Shared vocabulary, acronyms, and internal terms</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p style="margin-top:1.25rem;">To generate a client context file, paste this prompt:</p>
+          <div class="code-block">
+            <div class="code-block-header">
+              <span class="code-block-label">Client context prompt</span>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <pre>I want to create a context file for [client/project name]. Interview me to capture:
+- What they do and who their buyers are
+- Key terminology and product names (and anything I should never call it)
+- My role in this engagement
+- Style or voice rules for artifacts written on their behalf
+- Confidential information handling rules
+
+Save the result as claude-context/portco-&lt;name&gt;.md and update INDEX.md.</pre>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ── Maintenance ────────────────────────────────────────────── -->
+  <section class="maintenance">
+    <div class="container">
+      <p class="section-label">Keeping it current</p>
+      <p style="color:var(--gray-light);font-size:0.95rem;max-width:620px;margin-bottom:1.25rem;">The system is only as good as it stays current. Two standing rules:</p>
+      <ul style="padding-left:1.25rem;margin-bottom:1.5rem;">
+        <li style="color:var(--gray-light);font-size:0.9rem;margin-bottom:0.6rem;line-height:1.6;"><strong style="color:var(--off-white);">After any session where you correct Claude's behavior</strong> — ask it to update <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">operating-guide.md</code> so the correction sticks next session.</li>
+        <li style="color:var(--gray-light);font-size:0.9rem;margin-bottom:0.6rem;line-height:1.6;"><strong style="color:var(--off-white);">After adding or editing any file in claude-context/</strong> — ask Claude to update the Contents table in <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">INDEX.md</code> so the map stays accurate.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ── Quick reference ────────────────────────────────────────── -->
+  <div class="container">
+    <div class="quick-ref">
+      <h2>Quick Reference — Prompts to Bookmark</h2>
+
+      <div class="qr-item">
+        <h3>Run the setup interview</h3>
+        <p style="font-size:0.82rem;color:var(--gray);margin-bottom:0.5rem;">Use the full prompt in Step 3 above.</p>
+      </div>
+
+      <div class="qr-item">
+        <h3>Update your operating guide after a correction</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Prompt</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre>Update operating-guide.md to capture the rule we just established about [X].</pre>
+        </div>
+      </div>
+
+      <div class="qr-item">
+        <h3>Add a new client context file</h3>
+        <p style="font-size:0.82rem;color:var(--gray);margin-bottom:0.5rem;">Use the full prompt in Step 6 above.</p>
+      </div>
+
+      <div class="qr-item">
+        <h3>Add a new playbook or template</h3>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Prompt</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre>I want to document a repeatable workflow for [X]. Interview me and save it as claude-context/playbook-&lt;topic&gt;.md.</pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Footer ─────────────────────────────────────────────────── -->
+  <footer>
+    <div class="container">
+      <div class="footer-left">
+        <svg height="22" viewBox="0 0 220 60" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="OH.io">
+          <text x="2" y="52" font-family="'Inter', Helvetica, Arial, sans-serif" font-weight="900" font-size="58" fill="#EDEBE4">O</text>
+          <text x="48" y="52" font-family="'Inter', Helvetica, Arial, sans-serif" font-weight="900" font-size="58" fill="#EDEBE4">H</text>
+          <circle cx="107" cy="47" r="7" fill="#E8002D"/>
+          <text x="118" y="52" font-family="'Inter', Helvetica, Arial, sans-serif" font-weight="900" font-size="58" fill="#888888">i</text>
+          <text x="141" y="52" font-family="'Inter', Helvetica, Arial, sans-serif" font-weight="900" font-size="58" fill="#888888">o</text>
+        </svg>
+        <p>Internal Enablement</p>
+      </div>
+      <p>Claude Working Directory Setup Guide · June 2026</p>
+    </div>
+  </footer>
+
+  <script>
+    // ── Copy button ─────────────────────────────────────────────
+    function copyCode(btn) {
+      const pre = btn.closest('.code-block').querySelector('pre');
+      navigator.clipboard.writeText(pre.textContent.trim()).then(() => {
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+          btn.classList.remove('copied');
+        }, 2000);
+      });
+    }
+
+    // ── Progress dot active state ───────────────────────────────
+    const steps = ['step-1','step-2','step-3','step-4','step-5','step-6'];
+    const dots = document.querySelectorAll('.progress-dot');
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const idx = steps.indexOf(entry.target.id);
+          dots.forEach((d, i) => d.classList.toggle('active', i === idx));
+        }
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+
+    steps.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+  </script>
+
+</body>
+</html>
