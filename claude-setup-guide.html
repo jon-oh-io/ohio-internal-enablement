@@ -50,46 +50,48 @@
       border-bottom: 1px solid var(--border);
     }
 
-    /* ── Fast track (automated setup) ───────────────────────────── */
-    .fast-track {
-      background: var(--black-2);
+    /* ── Manual setup (collapsible) ─────────────────────────────── */
+    .manual-setup {
       border: 1px solid var(--border);
-      border-left: 3px solid var(--red);
-      border-radius: 0 10px 10px 0;
-      padding: 1.75rem 2rem;
-      margin-bottom: 3.5rem;
+      border-radius: 8px;
+      background: var(--black-2);
+      margin-top: 1.75rem;
+      overflow: hidden;
     }
-    .ft-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.65rem;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--red);
-      margin-bottom: 0.6rem;
-    }
-    .fast-track h3 {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--off-white);
-      letter-spacing: -0.02em;
-      margin-bottom: 0.6rem;
-    }
-    .fast-track > p {
-      font-size: 0.93rem;
+    .manual-setup summary {
+      cursor: pointer;
+      padding: 0.9rem 1.1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
       color: var(--gray-light);
-      line-height: 1.7;
-      margin-bottom: 1rem;
+      list-style: none;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      transition: color 0.15s;
     }
-    .fast-track .ft-note {
-      font-size: 0.83rem;
-      color: var(--gray);
-      margin-top: 1rem;
-      margin-bottom: 0;
+    .manual-setup summary:hover { color: var(--off-white); }
+    .manual-setup summary::-webkit-details-marker { display: none; }
+    .manual-setup summary::before {
+      content: '+';
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.1rem;
+      line-height: 1;
+      color: var(--red);
+      width: 0.9rem;
+      text-align: center;
     }
-    .fast-track a { color: var(--red); font-weight: 600; }
+    .manual-setup[open] summary::before { content: '−'; }
+    .manual-setup[open] summary { border-bottom: 1px solid var(--border); }
+    .manual-setup-body { padding: 1.25rem 1.5rem 0.75rem; }
+    .manual-setup-body h4 {
+      font-size: 0.98rem;
+      font-weight: 700;
+      color: var(--off-white);
+      letter-spacing: -0.01em;
+      margin: 1.75rem 0 0.5rem;
+    }
+    .manual-setup-body h4:first-child { margin-top: 0; }
 
     /* ── Steps ──────────────────────────────────────────────────── */
     .steps-section { padding: 4rem 0; }
@@ -377,7 +379,6 @@
     <a class="progress-dot" href="#step-3" title="Step 3"></a>
     <a class="progress-dot" href="#step-4" title="Step 4"></a>
     <a class="progress-dot" href="#step-5" title="Step 5"></a>
-    <a class="progress-dot" href="#step-6" title="Step 6"></a>
   </nav>
 
   <!-- ── Hero ──────────────────────────────────────────────────── -->
@@ -393,7 +394,7 @@
         </div>
         <div class="meta-item">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="#888" stroke-width="1.5"/><path d="M5 7h6M5 10h4" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg>
-          6 steps
+          5 steps
         </div>
         <div class="meta-item">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 4.5h10M3 8h10M3 11.5h6" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -432,17 +433,18 @@
     <div class="container">
       <h2>Step-by-step guide</h2>
 
-      <!-- Fast track: automated Steps 1 & 2 (Mac) -->
-      <div class="fast-track">
-        <span class="ft-badge">⚡ Fast track · Mac</span>
-        <h3>Automate Steps 1 &amp; 2</h3>
-        <p>On a Mac, skip the manual folder-and-file setup. Open <strong>Terminal</strong> (press ⌘-Space, type "Terminal", hit Return), paste the command below, and press Return. It creates your workspace and subfolders, writes a <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">CLAUDE.md</code> with the correct path already filled in, then opens the folder in Finder. When it finishes, continue at <a href="#step-3">Step&nbsp;3</a>.</p>
-        <div class="code-block">
-          <div class="code-block-header">
-            <span class="code-block-label">Paste into Terminal</span>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-          </div>
-          <pre>bash -c '
+      <!-- Step 1 -->
+      <div class="step" id="step-1">
+        <div class="step-number">1</div>
+        <div class="step-body">
+          <h3>Set Up Your Working Folder</h3>
+          <p>On a Mac, the entire setup is a single paste. Open <strong>Terminal</strong> (press ⌘-Space, type "Terminal", hit Return), paste the command below, and press Return. It creates your workspace and subfolders, writes a <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">CLAUDE.md</code> with the correct path already filled in, then opens the folder in Finder. When it finishes, continue to <a href="#step-2">Step&nbsp;2</a>.</p>
+          <div class="code-block">
+            <div class="code-block-header">
+              <span class="code-block-label">Paste into Terminal</span>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <pre>bash -c '
 WORKDIR="$HOME/Documents/Claude CoWork"
 
 # 1) Folder structure
@@ -459,64 +461,56 @@ fi
 echo "Workspace ready: $WORKDIR"
 open "$WORKDIR"
 '</pre>
-        </div>
-        <p class="ft-note">Prefer to set things up by hand, or not on a Mac? Follow Steps 1 &amp; 2 below instead.</p>
-      </div>
+          </div>
 
-      <!-- Step 1 -->
-      <div class="step" id="step-1">
-        <div class="step-number">1</div>
-        <div class="step-body">
-          <h3>Create Your Working Folder</h3>
-          <p>Open Cowork and select (or create) a dedicated folder on your computer. Good names: <strong>Claude CoWork</strong> or <strong>[Your Name] Claude</strong>. This becomes your persistent workspace.</p>
-          <p>Create the following folder structure inside it. Leave the files empty for now — you'll populate them in later steps.</p>
-          <div class="file-tree">
+          <details class="manual-setup">
+            <summary>Prefer to set it up manually, or not on a Mac?</summary>
+            <div class="manual-setup-body">
+              <h4>Create your working folder</h4>
+              <p>Open Cowork and select (or create) a dedicated folder on your computer. Good names: <strong>Claude CoWork</strong> or <strong>[Your Name] Claude</strong>. This becomes your persistent workspace.</p>
+              <p>Create the following folder structure inside it. Leave the files empty for now — you'll populate them in later steps.</p>
+              <div class="file-tree">
 <span class="folder">Claude CoWork/</span>
 ├── <span class="file-special">CLAUDE.md</span>          <span class="comment">← entry point</span>
 ├── <span class="folder">claude-context/</span>
 │   ├── INDEX.md
 │   └── operating-guide.md
 └── <span class="folder">portcos/</span>          <span class="comment">← or clients/, projects/</span>
-          </div>
-          <div class="callout">
-            <span class="callout-icon">✓</span>
-            <p>Create the folders now. The files will be generated for you in Step 3.</p>
-          </div>
+              </div>
+              <div class="callout">
+                <span class="callout-icon">✓</span>
+                <p>Create the folders now. The files will be generated for you in Step 2.</p>
+              </div>
+
+              <h4>Create CLAUDE.md</h4>
+              <p>This single file at the root of your working folder is the only instruction Claude reads automatically. Its entire job is to point Claude at your context folder. Create it with this content — updating the path to match your own folder location:</p>
+              <div class="code-block">
+                <div class="code-block-header">
+                  <span class="code-block-label">CLAUDE.md</span>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre>At the start of any non-trivial task, read /path/to/your/Claude CoWork/claude-context/INDEX.md and follow its guidance</pre>
+              </div>
+              <p><strong style="color:var(--off-white);">How to find your path:</strong></p>
+              <ul>
+                <li><strong>Mac:</strong> Right-click the <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;">claude-context</code> folder → Get Info → copy the path under "Where"</li>
+                <li><strong>Windows:</strong> Shift + right-click the folder → Copy as path</li>
+              </ul>
+              <div class="code-block" style="margin-top:0.75rem;">
+                <div class="code-block-header">
+                  <span class="code-block-label">Example (Mac, user named Alex)</span>
+                  <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                </div>
+                <pre>At the start of any non-trivial task, read /Users/alex/Documents/Claude CoWork/claude-context/INDEX.md and follow its guidance</pre>
+              </div>
+            </div>
+          </details>
         </div>
       </div>
 
       <!-- Step 2 -->
       <div class="step" id="step-2">
         <div class="step-number">2</div>
-        <div class="step-body">
-          <h3>Create CLAUDE.md</h3>
-          <p>This single file at the root of your working folder is the only instruction Claude reads automatically. Its entire job is to point Claude at your context folder.</p>
-          <p>Create <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">CLAUDE.md</code> with this content — updating the path to match your own folder location:</p>
-          <div class="code-block">
-            <div class="code-block-header">
-              <span class="code-block-label">CLAUDE.md</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-            </div>
-            <pre>At the start of any non-trivial task, read /path/to/your/Claude CoWork/claude-context/INDEX.md and follow its guidance</pre>
-          </div>
-          <p><strong style="color:var(--off-white);">How to find your path:</strong></p>
-          <ul>
-            <li><strong>Mac:</strong> Right-click the <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;">claude-context</code> folder → Get Info → copy the path under "Where"</li>
-            <li><strong>Windows:</strong> Shift + right-click the folder → Copy as path</li>
-          </ul>
-          <div class="code-block" style="margin-top:0.75rem;">
-            <div class="code-block-header">
-              <span class="code-block-label">Example (Mac, user named Alex)</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-            </div>
-            <pre>At the start of any non-trivial task, read /Users/alex/Documents/Claude CoWork/claude-context/INDEX.md and follow its guidance</pre>
-          </div>
-        </div>
-      </div>
-
-      <!-- Step 3 -->
-      <div class="step" id="step-3">
-        <div class="step-number">3</div>
         <div class="step-body">
           <h3>Run the Setup Interview</h3>
           <p>This is the most important step. Open a new Cowork session with your folder connected, then paste the prompt below. Claude will interview you one question at a time, then draft two files for your review:</p>
@@ -555,9 +549,9 @@ After the interview, draft both files and show them to me for review before savi
         </div>
       </div>
 
-      <!-- Step 4 -->
-      <div class="step" id="step-4">
-        <div class="step-number">4</div>
+      <!-- Step 3 -->
+      <div class="step" id="step-3">
+        <div class="step-number">3</div>
         <div class="step-body">
           <h3>Review and Save the Files</h3>
           <p>After the interview, Claude will show you drafts of <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">operating-guide.md</code> and <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">INDEX.md</code>. Check them carefully before confirming:</p>
@@ -574,9 +568,9 @@ After the interview, draft both files and show them to me for review before savi
         </div>
       </div>
 
-      <!-- Step 5 -->
-      <div class="step" id="step-5">
-        <div class="step-number">5</div>
+      <!-- Step 4 -->
+      <div class="step" id="step-4">
+        <div class="step-number">4</div>
         <div class="step-body">
           <h3>Test the Setup</h3>
           <p>Start a fresh Cowork session and give Claude a real task — something typical for your role. Verify that it:</p>
@@ -589,9 +583,9 @@ After the interview, draft both files and show them to me for review before savi
         </div>
       </div>
 
-      <!-- Step 6 -->
-      <div class="step" id="step-6">
-        <div class="step-number">6</div>
+      <!-- Step 5 -->
+      <div class="step" id="step-5">
+        <div class="step-number">5</div>
         <div class="step-body">
           <h3>Add Client or Project Context Files</h3>
           <p>Once your operating guide is in place, add a context file for each active client, project, or account. These are conditional — Claude only reads them when that subject is active.</p>
@@ -663,7 +657,7 @@ Save the result as claude-context/portco-&lt;name&gt;.md and update INDEX.md.</p
 
       <div class="qr-item">
         <h3>Run the setup interview</h3>
-        <p style="font-size:0.82rem;color:var(--gray);margin-bottom:0.5rem;">Use the full prompt in Step 3 above.</p>
+        <p style="font-size:0.82rem;color:var(--gray);margin-bottom:0.5rem;">Use the full prompt in Step 2 above.</p>
       </div>
 
       <div class="qr-item">
@@ -679,7 +673,7 @@ Save the result as claude-context/portco-&lt;name&gt;.md and update INDEX.md.</p
 
       <div class="qr-item">
         <h3>Add a new client context file</h3>
-        <p style="font-size:0.82rem;color:var(--gray);margin-bottom:0.5rem;">Use the full prompt in Step 6 above.</p>
+        <p style="font-size:0.82rem;color:var(--gray);margin-bottom:0.5rem;">Use the full prompt in Step 5 above.</p>
       </div>
 
       <div class="qr-item">
@@ -727,7 +721,7 @@ Save the result as claude-context/portco-&lt;name&gt;.md and update INDEX.md.</p
     }
 
     // ── Progress dot active state ───────────────────────────────
-    const steps = ['step-1','step-2','step-3','step-4','step-5','step-6'];
+    const steps = ['step-1','step-2','step-3','step-4','step-5'];
     const dots = document.querySelectorAll('.progress-dot');
 
     const observer = new IntersectionObserver((entries) => {
