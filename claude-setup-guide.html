@@ -283,11 +283,37 @@
     .guide-table tr:last-child td { border-bottom: none; }
     .guide-table tr:hover td { background: var(--black-2); }
 
-    /* ── Maintenance section ─────────────────────────────────────── */
-    .maintenance {
-      padding: 3.5rem 0;
+    /* ── Section divider ────────────────────────────────────────── */
+    .rule {
+      border: none;
       border-top: 1px solid var(--border);
+      margin: 0;
     }
+
+    /* ── Additional configuration & help ────────────────────────── */
+    .extras { padding: 3.5rem 0; }
+    .extra-block { margin-bottom: 3rem; }
+    .extra-block h3 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--off-white);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+    .extra-block p {
+      font-size: 0.93rem;
+      color: var(--gray-light);
+      margin-bottom: 1rem;
+      line-height: 1.75;
+    }
+    .extra-block ul { padding-left: 1.25rem; margin-bottom: 1rem; }
+    .extra-block li {
+      font-size: 0.9rem;
+      color: var(--gray-light);
+      margin-bottom: 0.5rem;
+      line-height: 1.65;
+    }
+    .extra-block li strong { color: var(--off-white); font-weight: 600; }
 
     /* ── Quick reference ────────────────────────────────────────── */
     .quick-ref {
@@ -378,7 +404,6 @@
     <a class="progress-dot" href="#step-2" title="Step 2"></a>
     <a class="progress-dot" href="#step-3" title="Step 3"></a>
     <a class="progress-dot" href="#step-4" title="Step 4"></a>
-    <a class="progress-dot" href="#step-5" title="Step 5"></a>
   </nav>
 
   <!-- ── Hero ──────────────────────────────────────────────────── -->
@@ -394,7 +419,7 @@
         </div>
         <div class="meta-item">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><rect x="2" y="3" width="12" height="10" rx="1.5" stroke="#888" stroke-width="1.5"/><path d="M5 7h6M5 10h4" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg>
-          5 steps
+          4 steps
         </div>
         <div class="meta-item">
           <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M3 4.5h10M3 8h10M3 11.5h6" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -583,47 +608,55 @@ After the interview, draft both files and show them to me for review before savi
         </div>
       </div>
 
-      <!-- Step 5 -->
-      <div class="step" id="step-5">
-        <div class="step-number">5</div>
-        <div class="step-body">
-          <h3>Add Client or Project Context Files</h3>
-          <p>Once your operating guide is in place, add a context file for each active client, project, or account. These are conditional — Claude only reads them when that subject is active.</p>
+    </div>
+  </section>
 
-          <table class="guide-table">
-            <thead>
-              <tr>
-                <th>File name</th>
-                <th>When to create it</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>portco-&lt;name&gt;.md</td>
-                <td>Per client — voice, buyers, terminology, do-not-use lists</td>
-              </tr>
-              <tr>
-                <td>template-&lt;artifact&gt;.md</td>
-                <td>Reusable output templates (ROI models, discovery decks, one-pagers)</td>
-              </tr>
-              <tr>
-                <td>playbook-&lt;topic&gt;.md</td>
-                <td>Repeatable workflows you run regularly (pre-call prep, post-call summaries)</td>
-              </tr>
-              <tr>
-                <td>glossary.md</td>
-                <td>Shared vocabulary, acronyms, and internal terms</td>
-              </tr>
-            </tbody>
-          </table>
+  <hr class="rule" />
 
-          <p style="margin-top:1.25rem;">To generate a client context file, paste this prompt:</p>
-          <div class="code-block">
-            <div class="code-block-header">
-              <span class="code-block-label">Client context prompt</span>
-              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-            </div>
-            <pre>I want to create a context file for [client/project name]. Interview me to capture:
+  <!-- ── Additional configuration & help ────────────────────────── -->
+  <section class="extras">
+    <div class="container">
+      <p class="section-label">Additional configuration &amp; help</p>
+
+      <!-- Add client or project context files -->
+      <div class="extra-block">
+        <h3>Add Client or Project Context Files</h3>
+        <p>Once your operating guide is in place, you can add a context file for each active client, project, or account. These are optional and conditional — Claude only reads them when that subject is active.</p>
+
+        <table class="guide-table">
+          <thead>
+            <tr>
+              <th>File name</th>
+              <th>When to create it</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>portco-&lt;name&gt;.md</td>
+              <td>Per client — voice, buyers, terminology, do-not-use lists</td>
+            </tr>
+            <tr>
+              <td>template-&lt;artifact&gt;.md</td>
+              <td>Reusable output templates (ROI models, discovery decks, one-pagers)</td>
+            </tr>
+            <tr>
+              <td>playbook-&lt;topic&gt;.md</td>
+              <td>Repeatable workflows you run regularly (pre-call prep, post-call summaries)</td>
+            </tr>
+            <tr>
+              <td>glossary.md</td>
+              <td>Shared vocabulary, acronyms, and internal terms</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p style="margin-top:1.25rem;">To generate a client context file, paste this prompt:</p>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Client context prompt</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre>I want to create a context file for [client/project name]. Interview me to capture:
 - What they do and who their buyers are
 - Key terminology and product names (and anything I should never call it)
 - My role in this engagement
@@ -631,63 +664,57 @@ After the interview, draft both files and show them to me for review before savi
 - Confidential information handling rules
 
 Save the result as claude-context/portco-&lt;name&gt;.md and update INDEX.md.</pre>
-          </div>
         </div>
       </div>
 
-    </div>
-  </section>
-
-  <!-- ── Maintenance ────────────────────────────────────────────── -->
-  <section class="maintenance">
-    <div class="container">
-      <p class="section-label">Keeping it current</p>
-      <p style="color:var(--gray-light);font-size:0.95rem;max-width:620px;margin-bottom:1.25rem;">The system is only as good as it stays current. Two standing rules:</p>
-      <ul style="padding-left:1.25rem;margin-bottom:1.5rem;">
-        <li style="color:var(--gray-light);font-size:0.9rem;margin-bottom:0.6rem;line-height:1.6;"><strong style="color:var(--off-white);">After any session where you correct Claude's behavior</strong> — ask it to update <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">operating-guide.md</code> so the correction sticks next session.</li>
-        <li style="color:var(--gray-light);font-size:0.9rem;margin-bottom:0.6rem;line-height:1.6;"><strong style="color:var(--off-white);">After adding or editing any file in claude-context/</strong> — ask Claude to update the Contents table in <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">INDEX.md</code> so the map stays accurate.</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- ── Quick reference ────────────────────────────────────────── -->
-  <div class="container">
-    <div class="quick-ref">
-      <h2>Quick Reference — Prompts to Bookmark</h2>
-
-      <div class="qr-item">
-        <h3>Run the setup interview</h3>
-        <p style="font-size:0.82rem;color:var(--gray);margin-bottom:0.5rem;">Use the full prompt in Step 2 above.</p>
+      <!-- Keeping it current -->
+      <div class="extra-block">
+        <h3>Keeping it current</h3>
+        <p>The system is only as good as it stays current. Two standing rules:</p>
+        <ul>
+          <li><strong>After any session where you correct Claude's behavior</strong> — ask it to update <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">operating-guide.md</code> so the correction sticks next session.</li>
+          <li><strong>After adding or editing any file in claude-context/</strong> — ask Claude to update the Contents table in <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">INDEX.md</code> so the map stays accurate.</li>
+        </ul>
       </div>
 
-      <div class="qr-item">
-        <h3>Update your operating guide after a correction</h3>
-        <div class="code-block">
-          <div class="code-block-header">
-            <span class="code-block-label">Prompt</span>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
-          </div>
-          <pre>Update operating-guide.md to capture the rule we just established about [X].</pre>
+      <!-- Quick reference -->
+      <div class="quick-ref">
+        <h2>Quick Reference — Prompts to Bookmark</h2>
+
+        <div class="qr-item">
+          <h3>Run the setup interview</h3>
+          <p style="font-size:0.82rem;color:var(--gray);margin-bottom:0.5rem;">Use the full prompt in Step 2 above.</p>
         </div>
-      </div>
 
-      <div class="qr-item">
-        <h3>Add a new client context file</h3>
-        <p style="font-size:0.82rem;color:var(--gray);margin-bottom:0.5rem;">Use the full prompt in Step 5 above.</p>
-      </div>
-
-      <div class="qr-item">
-        <h3>Add a new playbook or template</h3>
-        <div class="code-block">
-          <div class="code-block-header">
-            <span class="code-block-label">Prompt</span>
-            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+        <div class="qr-item">
+          <h3>Update your operating guide after a correction</h3>
+          <div class="code-block">
+            <div class="code-block-header">
+              <span class="code-block-label">Prompt</span>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <pre>Update operating-guide.md to capture the rule we just established about [X].</pre>
           </div>
-          <pre>I want to document a repeatable workflow for [X]. Interview me and save it as claude-context/playbook-&lt;topic&gt;.md.</pre>
+        </div>
+
+        <div class="qr-item">
+          <h3>Add a new client context file</h3>
+          <p style="font-size:0.82rem;color:var(--gray);margin-bottom:0.5rem;">Use the full prompt in “Add Client or Project Context Files” above.</p>
+        </div>
+
+        <div class="qr-item">
+          <h3>Add a new playbook or template</h3>
+          <div class="code-block">
+            <div class="code-block-header">
+              <span class="code-block-label">Prompt</span>
+              <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            </div>
+            <pre>I want to document a repeatable workflow for [X]. Interview me and save it as claude-context/playbook-&lt;topic&gt;.md.</pre>
+          </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
 
   <!-- ── Footer ─────────────────────────────────────────────────── -->
   <footer>
@@ -721,7 +748,7 @@ Save the result as claude-context/portco-&lt;name&gt;.md and update INDEX.md.</p
     }
 
     // ── Progress dot active state ───────────────────────────────
-    const steps = ['step-1','step-2','step-3','step-4','step-5'];
+    const steps = ['step-1','step-2','step-3','step-4'];
     const dots = document.querySelectorAll('.progress-dot');
 
     const observer = new IntersectionObserver((entries) => {
