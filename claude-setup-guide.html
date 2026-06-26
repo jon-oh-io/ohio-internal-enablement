@@ -50,6 +50,47 @@
       border-bottom: 1px solid var(--border);
     }
 
+    /* ── Fast track (automated setup) ───────────────────────────── */
+    .fast-track {
+      background: var(--black-2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--red);
+      border-radius: 0 10px 10px 0;
+      padding: 1.75rem 2rem;
+      margin-bottom: 3.5rem;
+    }
+    .ft-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 0.6rem;
+    }
+    .fast-track h3 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--off-white);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.6rem;
+    }
+    .fast-track > p {
+      font-size: 0.93rem;
+      color: var(--gray-light);
+      line-height: 1.7;
+      margin-bottom: 1rem;
+    }
+    .fast-track .ft-note {
+      font-size: 0.83rem;
+      color: var(--gray);
+      margin-top: 1rem;
+      margin-bottom: 0;
+    }
+    .fast-track a { color: var(--red); font-weight: 600; }
+
     /* ── Steps ──────────────────────────────────────────────────── */
     .steps-section { padding: 4rem 0; }
     .steps-section > .container > h2 {
@@ -382,11 +423,6 @@
           <h3>portcos/</h3>
           <p>Per-client or per-project subfolders for source material and generated outputs.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">🗂</div>
-          <h3>internal-enablement/</h3>
-          <p>Team-facing deliverables — guides, templates, and playbooks not tied to a specific client.</p>
-        </div>
       </div>
     </div>
   </section>
@@ -395,6 +431,37 @@
   <section class="steps-section">
     <div class="container">
       <h2>Step-by-step guide</h2>
+
+      <!-- Fast track: automated Steps 1 & 2 (Mac) -->
+      <div class="fast-track">
+        <span class="ft-badge">⚡ Fast track · Mac</span>
+        <h3>Automate Steps 1 &amp; 2</h3>
+        <p>On a Mac, skip the manual folder-and-file setup. Open <strong>Terminal</strong> (press ⌘-Space, type "Terminal", hit Return), paste the command below, and press Return. It creates your workspace and subfolders, writes a <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;color:var(--off-white);">CLAUDE.md</code> with the correct path already filled in, then opens the folder in Finder. When it finishes, continue at <a href="#step-3">Step&nbsp;3</a>.</p>
+        <div class="code-block">
+          <div class="code-block-header">
+            <span class="code-block-label">Paste into Terminal</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+          </div>
+          <pre>bash -c '
+WORKDIR="$HOME/Documents/Claude CoWork"
+
+# 1) Folder structure
+mkdir -p "$WORKDIR/claude-context" "$WORKDIR/portcos"
+
+# 2) CLAUDE.md - only created if it does not already exist
+if [ -f "$WORKDIR/CLAUDE.md" ]; then
+  echo "CLAUDE.md already exists - left untouched."
+else
+  printf "At the start of any non-trivial task, read %s/claude-context/INDEX.md and follow its guidance\n" "$WORKDIR" &gt; "$WORKDIR/CLAUDE.md"
+  echo "Created CLAUDE.md"
+fi
+
+echo "Workspace ready: $WORKDIR"
+open "$WORKDIR"
+'</pre>
+        </div>
+        <p class="ft-note">Prefer to set things up by hand, or not on a Mac? Follow Steps 1 &amp; 2 below instead.</p>
+      </div>
 
       <!-- Step 1 -->
       <div class="step" id="step-1">
@@ -409,8 +476,7 @@
 ├── <span class="folder">claude-context/</span>
 │   ├── INDEX.md
 │   └── operating-guide.md
-├── <span class="folder">portcos/</span>          <span class="comment">← or clients/, projects/</span>
-└── <span class="folder">internal-enablement/</span>
+└── <span class="folder">portcos/</span>          <span class="comment">← or clients/, projects/</span>
           </div>
           <div class="callout">
             <span class="callout-icon">✓</span>
