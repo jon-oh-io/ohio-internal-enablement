@@ -98,32 +98,6 @@
     .featured-cta svg { transition: transform 0.18s; }
     .featured:hover .featured-cta svg { transform: translateX(4px); }
 
-    /* Upcoming resource grid */
-    .upcoming-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--gray);
-      margin: 3.5rem 0 1.5rem;
-    }
-    .card.soon { opacity: 0.6; }
-    .card h3 {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .card .badge {
-      font-size: 0.58rem;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--gray);
-      border: 1px solid var(--gray-dim);
-      border-radius: 100px;
-      padding: 0.1rem 0.45rem;
-    }
-
     @media (max-width: 720px) {
       .hero { padding: 4rem 0 3rem; }
       .hero h1 { font-size: 2.2rem; }
@@ -190,31 +164,6 @@
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#E8002D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </span>
       </a>
-
-      <!-- Upcoming resources -->
-      <p class="upcoming-label">More coming soon</p>
-      <div class="cards">
-        <div class="card soon">
-          <div class="card-icon">💬</div>
-          <h3>Prompt Library <span class="badge">Soon</span></h3>
-          <p>A curated, copy-and-go collection of prompts for the team's most common tasks.</p>
-        </div>
-        <div class="card soon">
-          <div class="card-icon">📐</div>
-          <h3>Output Templates <span class="badge">Soon</span></h3>
-          <p>Reusable structures for decks, one-pagers, ROI models, and other deliverables.</p>
-        </div>
-        <div class="card soon">
-          <div class="card-icon">📘</div>
-          <h3>Playbooks <span class="badge">Soon</span></h3>
-          <p>Step-by-step workflows for recurring processes, from pre-call prep to recaps.</p>
-        </div>
-        <div class="card soon">
-          <div class="card-icon">🧭</div>
-          <h3>Best Practices <span class="badge">Soon</span></h3>
-          <p>Guidance on working effectively and safely with Claude across the organization.</p>
-        </div>
-      </div>
     </div>
   </section>
 
