@@ -6,104 +6,12 @@
   <title>Internal Enablement | OH.io</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
   <style>
-    /* ── Tokens ─────────────────────────────────────────────────── */
-    :root {
-      --black:      #0D0D0D;
-      --black-2:    #141414;
-      --black-3:    #1C1C1C;
-      --black-4:    #252525;
-      --off-white:  #EDEBE4;
-      --cream:      #D8D4CC;
-      --red:        #E8002D;
-      --red-dim:    #B8001F;
-      --gray:       #888888;
-      --gray-light: #AAAAAA;
-      --gray-dim:   #3A3A3A;
-      --border:     #2A2A2A;
-    }
-
-    /* ── Reset ──────────────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Inter', system-ui, sans-serif;
-      background: var(--black);
-      color: var(--off-white);
-      line-height: 1.7;
-      font-size: 16px;
-    }
-    a { color: inherit; text-decoration: none; }
-
-    /* ── Layout ─────────────────────────────────────────────────── */
-    .container { max-width: 860px; margin: 0 auto; padding: 0 2rem; }
-
-    /* ── Header ─────────────────────────────────────────────────── */
-    header {
-      background: var(--black);
-      border-bottom: 1px solid var(--border);
-      padding: 1.5rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      backdrop-filter: blur(8px);
-    }
-    header .container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .logo-link { display: inline-flex; align-items: center; text-decoration: none; }
-    .logo-svg { height: 36px; width: auto; display: block; }
-    .site-nav {
-      display: flex;
-      align-items: center;
-      gap: 1.75rem;
-    }
-    .site-nav a {
-      position: relative;
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--gray);
-      text-decoration: none;
-      padding: 0.25rem 0;
-      transition: color 0.15s;
-    }
-    .site-nav a:hover { color: var(--off-white); }
-    .site-nav a.active { color: var(--off-white); }
-    .site-nav a.active::after {
-      content: '';
-      position: absolute;
-      left: 0; right: 0; bottom: -3px;
-      height: 2px;
-      background: var(--red);
-    }
-
     /* ── Hero ───────────────────────────────────────────────────── */
     .hero {
       padding: 5.5rem 0 4rem;
       border-bottom: 1px solid var(--border);
-    }
-    .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.72rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--red);
-      margin-bottom: 1.25rem;
-    }
-    .hero-eyebrow::before {
-      content: '';
-      display: block;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--red);
     }
     .hero h1 {
       font-size: clamp(2.4rem, 5.5vw, 3.8rem);
@@ -119,16 +27,6 @@
       color: var(--gray-light);
       font-weight: 400;
       max-width: 600px;
-    }
-
-    /* ── Section heading ────────────────────────────────────────── */
-    .section-label {
-      font-size: 0.7rem;
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--red);
-      margin-bottom: 1.5rem;
     }
 
     /* ── Resources ──────────────────────────────────────────────── */
@@ -209,36 +107,8 @@
       color: var(--gray);
       margin: 3.5rem 0 1.5rem;
     }
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-    }
-    .card {
-      background: var(--black-2);
-      padding: 1.5rem;
-    }
     .card.soon { opacity: 0.6; }
-    .card-icon {
-      width: 36px;
-      height: 36px;
-      background: var(--black-4);
-      border: 1px solid var(--gray-dim);
-      border-radius: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
     .card h3 {
-      font-size: 0.85rem;
-      font-weight: 700;
-      color: var(--off-white);
-      margin-bottom: 0.35rem;
-      letter-spacing: -0.01em;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -253,30 +123,8 @@
       border-radius: 100px;
       padding: 0.1rem 0.45rem;
     }
-    .card p {
-      font-size: 0.8rem;
-      color: var(--gray);
-      line-height: 1.5;
-    }
-
-    /* ── Footer ─────────────────────────────────────────────────── */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 2.5rem 0;
-    }
-    footer .container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-    .footer-left { display: flex; align-items: center; gap: 1rem; }
-    footer p { font-size: 0.78rem; color: var(--gray); }
 
     @media (max-width: 720px) {
-      .site-nav { gap: 1.1rem; }
-      .site-nav a { font-size: 0.72rem; letter-spacing: 0.05em; }
       .hero { padding: 4rem 0 3rem; }
       .hero h1 { font-size: 2.2rem; }
       .featured {
